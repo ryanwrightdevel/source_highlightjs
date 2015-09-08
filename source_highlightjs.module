@@ -1,0 +1,72 @@
+<?php
+function source_highlightjs_init(){
+  $style = variable_get('sorucehightlightjs_style', false);
+  if(!$style)
+    return;
+
+  $path = 'sites/all/libraries/highlightjs';
+  $style = $path.'/styles/'.$style;
+  drupal_add_css($style);
+  drupal_add_js($path . '/highlight.pack.js');
+  drupal_add_js('hljs.initHighlightingOnLoad();','inline');
+
+}
+function source_highlightjs_menu(){
+  // Required parent menu.
+  $items['admin/config/sourcehighlightjs'] = array(
+    'title' => 'Configure Source Highlightjs',
+    'description' => 'Configure the sourcehighlightjs module',
+    'position' => 'left',
+    'weight' => -100,
+    'page callback' => 'system_admin_menu_block_page',
+    'access arguments' => array('access administration pages'),
+    'file' => 'system.admin.inc',
+    'file path' => drupal_get_path('module', 'system'),
+  );
+
+
+  $items['admin/config/sourcehighlightjs/config'] = array(
+    'title' => 'Configure Settings',
+    'description' => 'This is for a sub menu',
+    'page callback' => 'drupal_get_form',
+    'access arguments' => array('administer site configuration'),
+    'page arguments' => array('sourcehighlight_config_form'),
+  );
+
+  return $items;
+}
+
+function sourcehighlight_config_form(){
+
+  $styles = array();
+
+  try {
+    $iterator = new DirectoryIterator('/var/www/html/sites/all/libraries/highlightjs/styles');
+
+    foreach($iterator as $file){
+      if($file->isDot() || $file->isDir())
+        continue;
+      $styles[$file->getFilename()] = $file->getFilename();
+    }
+  }catch (Exception $e){
+
+  }
+
+  $default_style = variable_get('sorucehightlightjs_style', false);
+  //$path = file_source_
+  $form['style'] = array(
+    '#type' => 'select',
+    '#title' => t('Selected'),
+    '#options' => $styles,
+    '#default_value' => $default_style ? $default_style : '',
+    '#description' => t('Set this to <em>Yes</em> if you would like this category to be selected by default.'),
+  );
+  $form['submit'] = array('#type' => 'submit','#value'=> 'Save');
+  return $form;
+}
+
+function sourcehighlight_config_form_submit($form, $form_state){
+  $style = $form_state['values']['style'];
+  variable_set('sorucehightlightjs_style', $style);
+  drupal_set_message('Settings were saved');
+}

@@ -1,0 +1,3 @@
+Download highlightjs from https://highlightjs.org/
+Copy it to sites/all/libraries and rename the folder to highlightjs so that the full path is
+sites/all/libraries/highlightjs
