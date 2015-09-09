@@ -38,7 +38,18 @@ function source_highlightjs_menu(){
 
 function sourcehighlight_config_form(){
 
+  $found_library = true;
+  //path to highlightjs
+  $path = DRUPAL_ROOT.'/sites/all/libraries/highlightjs';
+  if(!file_exists($path) || !is_readable($path)){
+    $message = t(":path does not exists or is not readable. Please download https://highlightjs.org/ to this folder.",
+      array(':path' => $path));
+    drupal_set_message($message, 'error');
+  }
+
   $styles = array();
+
+
 
   try {
     $iterator = new DirectoryIterator(DRUPAL_ROOT.'/sites/all/libraries/highlightjs/styles');
@@ -60,6 +71,7 @@ function sourcehighlight_config_form(){
     '#options' => $styles,
     '#default_value' => $default_style ? $default_style : '',
     '#description' => t('Set this to <em>Yes</em> if you would like this category to be selected by default.'),
+    '#disabled' => $found_library ? false : true
   );
   $form['submit'] = array('#type' => 'submit','#value'=> 'Save');
   return $form;
