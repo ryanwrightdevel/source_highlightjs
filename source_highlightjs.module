@@ -41,7 +41,7 @@ function sourcehighlight_config_form(){
   $styles = array();
 
   try {
-    $iterator = new DirectoryIterator('/var/www/html/sites/all/libraries/highlightjs/styles');
+    $iterator = new DirectoryIterator(DRUPAL_ROOT.'/sites/all/libraries/highlightjs/styles');
 
     foreach($iterator as $file){
       if($file->isDot() || $file->isDir())
