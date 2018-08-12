@@ -1,0 +1,12 @@
+{
+  "name": "copperturn/source_highlightjs",
+  "description": "Module to load the source_highlightjs library",
+  "type": "drupal-module-custom",
+  "authors": [
+    {
+      "name": "Ryan Wright",
+      "email": "ryanwrightdev@gmail.com"
+    }
+  ],
+  "require": {}
+}
